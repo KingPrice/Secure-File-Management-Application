@@ -23,7 +23,7 @@ Port: 7274
 
 So far message.txt is just used to be transfered from client to server.
 
-### TO DO ###
+# TO DO
 1. Add Delete command.
 2. Fix client and server closing after running a command (write is exempt from this)
 3. Make commands much more robust so they do not break when user misinputs.
