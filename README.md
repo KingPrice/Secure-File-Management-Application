@@ -5,7 +5,9 @@ IS-3033 Class Project Repository
 Verion 0.0.2 Alpha
 
 So far only uses local connection on machine. 
+
 IP: 127.0.0.1
+
 Port: 7274 
  
 ### Commands 
