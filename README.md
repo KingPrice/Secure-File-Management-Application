@@ -8,12 +8,12 @@ So far only uses local connection on machine.
 IP: 127.0.0.1
 Port: 7274 
  
-There are only 5 commands out of 6 which are still missing implementation
-   connect: connects to server
-disconnect: closes and shuts server down
-    upload: uploads file to server then closes server
+There are only 5 commands out of 6 which are still missing implementation\n
+   connect: connects to server\n
+disconnect: closes and shuts server down\n
+    upload: uploads file to server then closes server\n
   download: downloads file from server then closes 
-     write: Prints out message on server //used for testing purposes should remove later
+     write: Prints out message on server //used for testing purposes should remove later\n
 
 So far message.txt is just used to be transfered from client to server.
 
