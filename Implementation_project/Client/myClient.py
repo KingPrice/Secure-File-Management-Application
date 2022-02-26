@@ -102,6 +102,25 @@ def download():
                 progress.update(len(bytes_read))
     sock.close()
 
+def delete():
+    try:
+        # sends download command to server
+        sock.send("delete".encode())
+    except:
+        print("failed to send command check server")
+        return
+    # receives count from server.
+    val = sock.recv(BUFFER_SIZE).decode('ascii')
+    count = int(val)
+    # Tells server its ready to receive file list
+    sock.send("1".encode())
+    while count > 0:
+        print(sock.recv(BUFFER_SIZE).decode('ascii'))
+        count -= 1
+    filename = input("Enter the name of the file to delete ")
+    sock.send(filename.encode())
+    print(sock.recv(BUFFER_SIZE).decode('ascii'))
+    return
 
 #  Uploads file to the location of the server
 def upload():
@@ -142,7 +161,8 @@ while True:
           + "disconnect: disconnects from the server\n"
           + "     write: prints text to the screen of the server\n"
           + "    upload: Uploads a file from the folder the clients application is located\n"
-          + "  download: Downloads a file from the folder the server application is located\n")
+          + "  download: Downloads a file from the folder the server application is located\n"
+          + "    delete: Deletes a file from the server folder.")
     prompt = input("Enter command:")
     # Nested if else that reads prompt for commands
     if prompt == "connect":
@@ -158,6 +178,9 @@ while True:
         break
     elif prompt == "download":
         download()
+        break
+    elif prompt == "delete":
+        delete()
         break
     else:
         print("command not recognised:{}".format(prompt))

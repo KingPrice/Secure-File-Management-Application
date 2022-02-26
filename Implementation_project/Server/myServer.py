@@ -107,6 +107,34 @@ def download():
     conn.close()
     sock.close()
 
+def delete():
+    # counts the number of files in the directory
+    count = 0
+    for name in os.listdir():
+        if not name.endswith(".py"):
+            count += 1
+    val = str(count)
+    # sends number of files in server directory to client.
+    conn.send(val.encode())
+    # Gets ok from client to start sending file list
+    conn.recv(BUFFER_SIZE)
+    # sends file name to client in a list.
+    for name in os.listdir():
+        if not name.endswith(".py"):
+            conn.send(name.encode())
+    # Receives file requested for deletion from client.
+    try:
+        filename = conn.recv(BUFFER_SIZE).decode('ascii')
+    except:
+        print("failed to receive name of file")
+        return
+    # Checks if the file path is real or not.
+    if os.path.isfile(filename):
+        os.remove(filename) # removes file
+    else:
+        print("Error: check name of file")
+    return
+
 # Waits for commands and processes them
 while True:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -133,7 +161,8 @@ while True:
     elif data == "download":
         download()
         break
-    elif data == "list":
-        list()
+    elif data == "delete":
+        delete()
+        break
     # if a command is not recognized it will get reset and loop
     data = None
