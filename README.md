@@ -21,12 +21,13 @@ Port: 7274
   
   * write: Prints out message on server  //used for testing purposes should remove later
 
+  * delete: Delete's files from the server
+
 So far message.txt is just used to be transfered from client to server.
 
 # TO DO
-1. Add Delete command.
-2. Fix client and server closing after running a command (write is exempt from this)
-3. Make commands much more robust so they do not break when user misinputs.
-4. Remove write once all other commands are properly implemented.
-5. add OPENLDAP functionality. 
-6. complete this list.
+1. Fix client and server closing after running a command (write is exempt from this)
+2. Make commands much more robust so they do not break when user misinputs.
+3. Remove write once all other commands are properly implemented.
+4. add OPENLDAP functionality. 
+5. complete this list.
