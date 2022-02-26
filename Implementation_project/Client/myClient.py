@@ -57,14 +57,20 @@ def write():
 
 # Download files from the server to the client
 def download():
-    print("choose a file to download")
-    print(sock.recv(BUFFER_SIZE).decode('ascii'))
     try:
+        # sends download command to server
         sock.send("download".encode())
-        # Gets ANK from server
     except:
         print("failed to send command check server")
         return
+    # receives count from server.
+    val = sock.recv(BUFFER_SIZE).decode('ascii')
+    count = int(val)
+    # Tells server its ready to receive file list
+    sock.send("1".encode())
+    while count > 0:
+        print(sock.recv(BUFFER_SIZE).decode('ascii'))
+        count -= 1
     try:
         filename = input("Enter the name of the file to download: ")
         sock.send(filename.encode())
@@ -149,7 +155,9 @@ while True:
         break
     elif prompt == "upload":
         upload()
+        break
     elif prompt == "download":
         download()
+        break
     else:
         print("command not recognised:{}".format(prompt))

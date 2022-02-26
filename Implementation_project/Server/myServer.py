@@ -66,8 +66,17 @@ def upload():
 
 # Sends a file to the client from the server
 def download():
-    #  Tells the client it's ready to send files.
-    conn.send("1".encode())
+    # counts the number of files in the directory
+    count = 0
+    for name in os.listdir():
+        if not name.endswith(".py"):
+            count += 1
+    val = str(count)
+    # sends number of files in server directory to client.
+    conn.send(val.encode())
+    # Gets ok from client to start sending file list
+    conn.recv(BUFFER_SIZE)
+    # sends file name to client in a list.
     for name in os.listdir():
         if not name.endswith(".py"):
             conn.send(name.encode())
@@ -120,8 +129,10 @@ while True:
         break
     elif data == "upload":
         upload()
+        break
     elif data == "download":
         download()
+        break
     elif data == "list":
         list()
     # if a command is not recognized it will get reset and loop
