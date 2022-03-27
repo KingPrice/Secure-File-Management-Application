@@ -25,7 +25,7 @@ Port: 7274
 
 So far message.txt is just used to be transfered from client to server.
 
-Added Ldap part but it does not work yet
+Added LDAP part but it does not work yet
 # TO DO
 1. Fix client and server closing after running a command (write is exempt from this)
 2. Make commands much more robust so they do not break when user misinputs.
