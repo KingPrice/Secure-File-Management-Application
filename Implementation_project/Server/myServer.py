@@ -9,7 +9,7 @@ import tqdm
 # Variables for socket to use.
 TCP_connect = "127.0.0.1"  # set to loop back for internal server testing purposes. add real ip's later.
 TCP_port = 7274  # Random tcp port number
-BUFFER_SIZE = 2048  # Standard size
+BUFFER_SIZE = 1024  # Standard size
 SEPARATOR = "<SEPARATOR>"  # Used to make uploading files easier
 
 
@@ -25,7 +25,7 @@ def disconnect():
     return
 
 
-# Prints message received from clients.
+# Prints message received from clients. (REMOVE LATER)
 def write():
     # Tells the client it's ready to accept messages
     conn.send("1".encode())
@@ -51,6 +51,7 @@ def upload():
     filesize = int(filesize)
     # start receiving the file from the socket
     progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+    # opens file and begins to write the file to the server folder
     with open(filename, "wb") as f:
         while True:
             # read 1024 bytes from the socket (receive)
@@ -68,6 +69,7 @@ def upload():
 def download():
     # counts the number of files in the directory
     count = 0
+    # counts file in directory. Does not count the server file.
     for name in os.listdir():
         if not name.endswith(".py"):
             count += 1
@@ -94,6 +96,7 @@ def download():
         print("File failed to send. Check connection.")
         return
     progress = tqdm.tqdm(range(filesize), f"Sending{filename}", unit="B", unit_scale=True, unit_divisor=1024)
+    # opens file in server and begins to write it to file.
     with open(filename, "rb") as f:
         while True:
             # read the bytes from the file
