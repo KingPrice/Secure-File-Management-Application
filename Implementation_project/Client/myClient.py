@@ -8,23 +8,22 @@ import os
 import tqdm
 
 # Variables for socket to use
-TCP_connect = "127.0.0.1"  # loop back ip address
-TCP_port = 7274  # Random tcp port number
 BUFFER_SIZE = 1024  # Standard size
 SEPARATOR = "<SEPARATOR>"  # Used to make uploading files easier
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
 # Handles connection to the server.
-def connect():
+def connect(TCP_connect = '127.0.0.1', TCP_port = 7274):
     print("Attempting to establish connection with server")
     try:
         sock.connect((TCP_connect, TCP_port))
     except:
         print("Connection failed, either connection failed or wrong command (Im so sorry)")
-    return
+    print("Connection established")
 
 
+"""
 # Handles disconnection from server. Will probably add a way to close client as well since this shuts down the server
 def disconnect():
     sock.send("disconnect".encode())
@@ -33,7 +32,7 @@ def disconnect():
     sock.close()
     print("Server connection ended")
     return
-
+"""
 
 # functions responsible for file management on server. (need to find out how server selects files)
 
@@ -42,7 +41,6 @@ def disconnect():
 def write():
     try:
         sock.send("write".encode())  # Sends command to server
-        sock.recv(BUFFER_SIZE)  # Receives acknowledgement from server
         msg = input("enter text:")  # User inputs their message here
     except:
         print("Failed to send message. Check server status")
@@ -120,7 +118,7 @@ def delete():
     count = int(val)
     # Tells server its ready to receive file list
     sock.send("1".encode())
-    # As long as the number of files is higher than 0 List them on client
+    # As long as the number of files is higher than 0 List them on client.
     while count > 0:
         print(sock.recv(BUFFER_SIZE).decode('ascii'))
         count -= 1
@@ -168,23 +166,24 @@ def upload():
 
 
 while True:
-    print("Currently there are 5 commands that are Usable\n"
-          + "   connect: connects to the server \n"
-          + "disconnect: disconnects from the server\n"
+    sel = input("Would you like to use default address y/n?:  ")
+    if sel == 'y':
+        connect()
+    else:
+        TCP_connect = input("Enter ip address:  ")
+        TCP_port = int(input("Enter a portnumber"))
+        connect(TCP_connect, TCP_port)
+
+
+    print("Currently there are 4 commands that are Usable\n"
           + "     write: prints text to the screen of the server\n"
           + "    upload: Uploads a file from the folder the clients application is located\n"
           + "  download: Downloads a file from the folder the server application is located\n"
           + "    delete: Deletes a file from the server folder.")
     prompt = input("Enter command:")
     # Nested if else that reads prompt for commands
-    if prompt == "connect":
-        connect()
-    elif prompt == "disconnect":
-        disconnect()
-    elif prompt == "write":
+    if prompt == "write":
         write()
-    elif prompt == "quit":
-        break
     elif prompt == "upload":
         upload()
         break
