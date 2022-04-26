@@ -1,0 +1,57 @@
+#citation https://stackoverflow.com/questions/27287306/sending-encrypted-strings-using-socket-in-python
+
+from socket import *
+from threading import Thread
+
+def clientHandler():
+    conn, addr = s.accept()
+    print addr, "is connected"
+    while 1:
+        data = conn.recv(1024)
+        if not data:
+            break
+        print "Received Message", repr(data)
+
+
+HOST = "" #localhost
+PORT = 15000
+
+
+s = socket(AF_INET, SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(4)
+
+print "Server is runnig"
+#Thread(target=clientHandler).start()
+#Thread(target=clientHandler).start()
+#Thread(target=clientHandler).start()
+
+for i in range(4):
+    Thread(target=clientHandler).start()
+
+s.close()
+
+--------------------------------------------------
+
+from socket import *
+s = socket()
+s.connect(("localhost",15000))
+s.send()
+
+-----------------------------------------------------
+
+from Crypto.Cipher import AES
+
+def do_encrypt(message):
+    obj = AES.new('This is a key123', AES.MODE_CBC, 'This is an IV456')
+    ciphertext = obj.encrypt(message)
+    return ciphertext
+    
+ -------------------------------
+ 
+ from Crypto.Cipher import AES
+
+def do_decrypt(ciphertext):
+    obj2 = AES.new('This is a key123', AES.MODE_CBC, 'This is an IV456')
+    message = obj2.decrypt(ciphertext)
+    return message
