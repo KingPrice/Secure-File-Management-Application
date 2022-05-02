@@ -6,18 +6,23 @@
 import socket
 import os
 import tqdm
+import ssl
+
+
 
 # Variables for socket to use
 BUFFER_SIZE = 1024  # Standard size
 SEPARATOR = "<SEPARATOR>"  # Used to make uploading files easier
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+# SSL variables here
+WSock = ssl.wrap_socket(sock, keyfile="Certs/ImpDemo.key", certfile="Certs/ImpDemo.crt")
 
 # Handles connection to the server.
 def connect(TCP_connect = '127.0.0.1', TCP_port = 7274):
     print("Attempting to establish connection with server")
     try:
-        sock.connect((TCP_connect, TCP_port))
+        WSock.connect((TCP_connect, TCP_port))
     except:
         print("Connection failed, either connection failed or wrong command (Im so sorry)")
     print("Connection established")
@@ -40,13 +45,13 @@ def disconnect():
 # Writes messages to be printed out by the server (REMOVE LATER)
 def write():
     try:
-        sock.send("write".encode())  # Sends command to server
+        WSock.send("write".encode())  # Sends command to server
         msg = input("enter text:")  # User inputs their message here
     except:
         print("Failed to send message. Check server status")
         return  # ends function upon failure
     try:
-        sock.send(msg.encode())  # Sends user message to server
+        WSock.send(msg.encode())  # Sends user message to server
         return  # ends function
     except:
         print("\nStep 2 failed.")
@@ -57,29 +62,29 @@ def write():
 def download():
     try:
         # sends download command to server
-        sock.send("download".encode())
+        WSock.send("download".encode())
     except:
         print("failed to send command check server")
         return
     # receives count from server.
-    val = sock.recv(BUFFER_SIZE).decode('ascii')
+    val = WSock.recv(BUFFER_SIZE).decode('ascii')
     count = int(val)
     # Tells server its ready to receive file list
-    sock.send("1".encode())
+    WSock.send("1".encode())
     # list files that can be downloaded on the client
     while count > 0:
-        print(sock.recv(BUFFER_SIZE).decode('ascii'))
+        print(WSock.recv(BUFFER_SIZE).decode('ascii'))
         count -= 1
     # Sends file to server
     try:
         filename = input("Enter the name of the file to download: ")
-        sock.send(filename.encode())
+        WSock.send(filename.encode())
     except:
         print("failed to verify file name from server")
         return
     # Receives file name and size
     try:
-        user_data = sock.recv(BUFFER_SIZE).decode()
+        user_data = WSock.recv(BUFFER_SIZE).decode()
     except:
         print("Error receiving data from client")
         return
@@ -95,37 +100,37 @@ def download():
         while True:
             print("receiving data...")
             # read 1024 bytes from the server (receive)
-            bytes_read = sock.recv(BUFFER_SIZE)
+            bytes_read = WSock.recv(BUFFER_SIZE)
             if not bytes_read:
                 print("File download {} complete".format(filename))
                 break
             # write to the file the bytes we just received
             f.write(bytes_read)
             progress.update(len(bytes_read))
-    sock.close()
+    WSock.close()
 
 
 # command that handles file deletion
 def delete():
     try:
         # sends download command to server
-        sock.send("delete".encode())
+        WSock.send("delete".encode())
     except:
         print("failed to send command check server")
         return
     # receives count from server.
-    val = sock.recv(BUFFER_SIZE).decode('ascii')
+    val = WSock.recv(BUFFER_SIZE).decode('ascii')
     count = int(val)
     # Tells server its ready to receive file list
-    sock.send("1".encode())
+    WSock.send("1".encode())
     # As long as the number of files is higher than 0 List them on client.
     while count > 0:
-        print(sock.recv(BUFFER_SIZE).decode('ascii'))
+        print(WSock.recv(BUFFER_SIZE).decode('ascii'))
         count -= 1
     # Sends the file requested to be deleted
     filename = input("Enter the name of the file to delete ")
-    sock.send(filename.encode())
-    print(sock.recv(BUFFER_SIZE).decode('ascii'))
+    WSock.send(filename.encode())
+    print(WSock.recv(BUFFER_SIZE).decode('ascii'))
     # Verification of file deleted
     print("File has been deleted")
     return
@@ -138,8 +143,8 @@ def upload():
         if not name.endswith(".py"):
             print(name)
     try:
-        sock.send("upload".encode())
-        sock.recv(BUFFER_SIZE)
+        WSock.send("upload".encode())
+        WSock.recv(BUFFER_SIZE)
         filename = input("Enter the name of the file to upload: ")
     except:
         print("failed to send command. Check connection to server\n")
@@ -148,7 +153,7 @@ def upload():
     filesize = os.path.getsize(filename)
     try:
         # Sends filename and Size to the server.
-        sock.send(f"{filename}{SEPARATOR}{filesize}".encode())
+        WSock.send(f"{filename}{SEPARATOR}{filesize}".encode())
     except:
         print("File failed to send. Check connection")
     progress = tqdm.tqdm(range(filesize), f"Sending{filename}", unit="B", unit_scale=True, unit_divisor=1024)
@@ -159,10 +164,10 @@ def upload():
             if not bytes_read:
                 print("File transmission complete")
                 break
-            sock.sendall(bytes_read)
+            WSock.sendall(bytes_read)
             # updates progress bar
             progress.update(len(bytes_read))
-    sock.close()
+    WSock.close()
 
 
 while True:

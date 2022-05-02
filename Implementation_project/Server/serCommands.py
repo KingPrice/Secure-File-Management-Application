@@ -14,6 +14,7 @@ def write(conn):
     # Turns the received message to ascii string
     msg = conn.recv(1024).decode("utf-8")
     print(msg)
+
     conn.close()
     return
 
