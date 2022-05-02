@@ -1,5 +1,5 @@
 ### Functionality ###
-Verion 0.0.1 Alpha
+Verion 0.5.1 Alpha
 
 So far only uses local connection on machine. 
 IP: 127.0.0.1
@@ -13,11 +13,10 @@ disconnect: closes and shuts server down
      write: Prints out message on server //used for testing purposes should remove later
 
 So far message.txt is just used to be transfered from client to server.
+Other_file.txt was used to make sure that I did indeed transfer files.
 
 ### TO DO ###
-1. Add Delete command.
-2. Add functionality to download so it list the files on the server.
-3. Remove write once all other commands are properly implemented.
-4. add OPENLDAP functionality. 
-5. complete this list.
+1. add OPENLDAP functionality. 
+2. Get to bind to the server.
+3. complete this list.
 
