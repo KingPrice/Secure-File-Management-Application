@@ -1,13 +1,30 @@
 
 import os
 import tqdm
-
+import ldap
 
 # Figure a way to implement this like a switch statement because the coding on this gets redundant very fast
 # And it's super annoying. Also, it may make it easier to implement ldap and other things with this doc just
 # being used for commands
 
 SEPARATOR = "<SEPARATOR>"
+
+def login(conn):
+    ldapconn = ldap.initialize('ldap://localhost')
+
+    ID = ""
+
+    cn = conn.recv(1024).decode("utf-8")
+    User = 'cn=' + cn + ',cn=SysUsers,dc=ImpDemo,dc=com'
+    PW = conn.recv(1024).decode("utf-8")
+    ldapconn.simple_bind_s(User, PW)
+    cn = 'cn=' + cn
+    UID = ldapconn.search_s("dc=ImpDemo,dc=com", ldap.SCOPE_SUBTREE, cn, ['uidNumber'])
+    UID = str(UID)
+    for n in UID:
+        if n.isdecimal():
+            ID = ID + n
+    return ID
 
 # Prints message received from clients. (REMOVE LATER)
 def write(conn):

@@ -1,8 +1,4 @@
-# Plans for client
-# User needs to be able to upload, download, and delete files from the server
-# Add list function that list files on server.
-# when sending always encode() and when recv always decode().
-#
+
 import socket
 import os
 import tqdm
@@ -15,17 +11,18 @@ BUFFER_SIZE = 1024  # Standard size
 SEPARATOR = "<SEPARATOR>"  # Used to make uploading files easier
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# SSL variables here
+# Variable to wrap socket in SSL
 WSock = ssl.wrap_socket(sock, keyfile="Certs/ImpDemo.key", certfile="Certs/ImpDemo.crt")
 
-# Handles connection to the server.
+# Handles connection to the python server.
 def connect(TCP_connect = '127.0.0.1', TCP_port = 7274):
     print("Attempting to establish connection with server")
     try:
         WSock.connect((TCP_connect, TCP_port))
     except:
-        print("Connection failed, either connection failed or wrong command (Im so sorry)")
-    print("Connection established")
+        print("Connection failed, Try restarting client?")
+    else:
+        print("Connection established")
 
 
 """
@@ -169,8 +166,16 @@ def upload():
             progress.update(len(bytes_read))
     WSock.close()
 
+# Sends login info to server.
+def login():
+    usr = input("Enter your user name:  ")
+    pw = input("Enter our password:  ")
+    WSock.send(usr.encode())
+    WSock.send(pw.encode())
+    return
 
 while True:
+    # Command that allows us to either use the default address or choose a custom address to connect to.
     sel = input("Would you like to use default address y/n?:  ")
     if sel == 'y':
         connect()
@@ -179,24 +184,28 @@ while True:
         TCP_port = int(input("Enter a portnumber"))
         connect(TCP_connect, TCP_port)
 
+    login() # Loop that determines login to ldap server
 
     print("Currently there are 4 commands that are Usable\n"
           + "     write: prints text to the screen of the server\n"
           + "    upload: Uploads a file from the folder the clients application is located\n"
           + "  download: Downloads a file from the folder the server application is located\n"
           + "    delete: Deletes a file from the server folder.")
-    prompt = input("Enter command:")
+
     # Nested if else that reads prompt for commands
-    if prompt == "write":
-        write()
-    elif prompt == "upload":
-        upload()
-        break
-    elif prompt == "download":
-        download()
-        break
-    elif prompt == "delete":
-        delete()
-        break
-    else:
-        print("command not recognised:{}".format(prompt))
+    while True: # nested while loop created for permissions denied. Lets user input a command until one goes through
+        prompt = input("Enter command:")
+        if prompt == "write":
+            write()
+            break
+        elif prompt == "upload":
+            upload()
+            break
+        elif prompt == "download":
+            download()
+            break
+        elif prompt == "delete":
+            delete()
+            break
+        else:
+            print("command not recognised:{}".format(prompt))
