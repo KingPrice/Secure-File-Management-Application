@@ -2,9 +2,9 @@
 IS-3033 Class Project Repository 
 
 ## Functionality
-Verion 0.6.1 Beta
+Verion 1.0.1 
 
-So far only uses local connection on machine. 
+Connection isolated to local machine
 
 IP: 127.0.0.1
 
@@ -22,8 +22,17 @@ Port: 7274
 
 So far message.txt and Other_File.txt are used to test if the client and server can transfer files. 
 
-Removed unfuctionsal LDAP portion
+## Issues
+Server crashes if commands are intrupted mid way. 
+
+log deletes self everytime server is restarted.
+
+client has to restart every time a command is entered.
+
+
+
 # TO DO
-1. make the logigg work as the command is used.
-2. ...
-3. complete this list.
+1. Add exceptions to make sure commands dont crash server when being used mid process.
+2. fix log file deleting itself every time the server restarts.
+3. add fancy login for client. 
+4. finish this list.
