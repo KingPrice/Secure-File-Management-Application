@@ -144,7 +144,7 @@ def delete():
 #  Uploads file to the location of the server
 def upload():
     print("choose a file to upload")
-    for name in os.listdir():
+    for name in os.listdir('files'):
         if not name.endswith(".py"):
             print(name)
     try:
@@ -158,14 +158,14 @@ def upload():
         print("failed to send command. Check connection to server\n")
         return
     # gets size of file
-    filesize = os.path.getsize(filename)
+    filesize = os.path.getsize('files/' + filename)
     try:
         # Sends filename and Size to the server.
         WSock.send(f"{filename}{SEPARATOR}{filesize}".encode())
     except:
         print("File failed to send. Check connection")
     progress = tqdm.tqdm(range(filesize), f"Sending{filename}", unit="B", unit_scale=True, unit_divisor=1024)
-    with open(filename, "rb") as f:
+    with open('files/' + filename, "rb") as f:
         while True:
             # read the bytes from the file
             bytes_read = f.read(BUFFER_SIZE)

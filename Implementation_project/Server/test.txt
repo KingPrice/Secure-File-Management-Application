@@ -1,5 +1,2 @@
-root invalid username or password from ('127.0.0.1', 43998)
-root bob dan Has logged in
-root bob dan Has logged in
-root bob dan Has logged in
-root 1001 has uploaded Other_File.txt
+root Elias Bou-harb Has logged in
+root 1002 has sent hello there kind sir
