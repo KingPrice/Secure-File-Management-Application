@@ -2,7 +2,7 @@
 IS-3033 Class Project Repository 
 
 ## Functionality
-Verion 0.5.4 Beta
+Verion 0.6.1 Beta
 
 So far only uses local connection on machine. 
 
@@ -24,8 +24,6 @@ So far message.txt and Other_File.txt are used to test if the client and server 
 
 Removed unfuctionsal LDAP portion
 # TO DO
-1. add ldap functionality
-2. add login to make sure users can login to LDAP server
-3. make the logigg work as the command is used.
-4. ...
-5. complete this list.
+1. make the logigg work as the command is used.
+2 ...
+5 complete this list.
