@@ -33,7 +33,7 @@ def login(conn, addr):
     for n in UID:
         if n.isdecimal():
             ID = ID + n
-
+    print(ID)
     return ID
 
 # Prints message received from clients. LMAO everyone can use this
@@ -47,9 +47,10 @@ def write(conn, perms):
 
 
 # Receives file from client and adds file to folder application is stored in.
-def upload(conn,perms):
-    if perms == '1000' or '1002':
-        #  Tells the client it's ready to receive files
+def upload(conn, perms):
+    # Elias and jake niles can upload files.
+    if perms == "1000" or perms == "1002":
+        # Tells the client it's ready to receive files
         conn.send("1".encode())
         #  Data user has uploaded form the client socket
         try:
@@ -78,13 +79,14 @@ def upload(conn,perms):
                 progress.update(len(bytes_read))
         logging.info(perms + " has uploaded " + filename)
     else:
-        logging.info(perms + "Attempted to upload file")
+        conn.send("Permission Denied".encode())
+        logging.info(perms + " Attempted to upload file")
 
 
 # Sends a file to the client from the server
-def download(conn,perms):
-    # Elias and Bob can download files
-    if perms == '1000' or '1001':
+def download(conn, perms):
+    # Elias and bob can download files
+    if perms == "1002" or perms == "1001":
         # counts the number of files in the directory
         count = 0
         # counts file in directory. Does not count the server file.
@@ -132,7 +134,8 @@ def download(conn,perms):
         print("Connection closed")
         logging.info(perms + " has insufficient privileges")
 
-def delete(conn,perms):
+def delete(conn, perms):
+    # Only Bou-harb can delete files
     if perms == '1002':
         # counts the number of files in the directory
         count = 0

@@ -1,10 +1,7 @@
-
 import socket
 import os
 import tqdm
 import ssl
-
-
 
 # Variables for socket to use
 BUFFER_SIZE = 1024  # Standard size
@@ -143,13 +140,14 @@ def delete():
 
 #  Uploads file to the location of the server
 def upload():
-    print("choose a file to upload")
+    print(f"\n")
     for name in os.listdir('files'):
         if not name.endswith(".py"):
             print(name)
     try:
         WSock.send("upload".encode())
-        if WSock.recv(BUFFER_SIZE).decode("utf-8") == '1':
+        val = WSock.recv(1024).decode("utf-8")
+        if val == '1':
             filename = input("Enter the name of the file to upload: ")
         else:
             print("Permission Denied")
