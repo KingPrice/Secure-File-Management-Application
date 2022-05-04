@@ -25,5 +25,5 @@ So far message.txt and Other_File.txt are used to test if the client and server 
 Removed unfuctionsal LDAP portion
 # TO DO
 1. make the logigg work as the command is used.
-2 ...
-5 complete this list.
+2. ...
+3. complete this list.
