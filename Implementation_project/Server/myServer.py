@@ -8,8 +8,8 @@ from serCommands import *
 def process_command():
     conn, addr = WSock.accept() # Should be ready to read
     print(f"Accepted connection from {addr}")
-    permission = login(conn) #add error handling
-    print(permission)
+    perms = login(conn) #add error handling
+    print(perms)
     cmd = conn.recv(1024).decode('ascii')
     if(cmd == "upload"):
         upload(conn)
