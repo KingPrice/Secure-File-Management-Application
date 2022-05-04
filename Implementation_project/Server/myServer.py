@@ -1,8 +1,3 @@
-# use socket listen to specify the number of connections allowed at once.
-# Need to find what imports to add
-# Pretty sure logging is going to take place on this application
-# encode and decode are essential to any type of communication
-
 
 import sys
 import socket
@@ -11,24 +6,23 @@ import ssl
 from serCommands import *
 
 def process_command():
-    #enter here
     conn, addr = WSock.accept() # Should be ready to read
     print(f"Accepted connection from {addr}")
+    perms = login(conn, addr) #add error handling
     cmd = conn.recv(1024).decode('ascii')
     if(cmd == "upload"):
-        upload(conn)
+        upload(conn, perms)
     elif(cmd == "download"):
-        download(conn)
+        download(conn, perms)
     elif(cmd == "delete"):
-        delete(conn)
+        delete(conn, perms)
     elif(cmd == "write"):
-        write(conn)
+        write(conn, perms)
     else:
         print("Error please enter a valid command")
     return
 
-
-
+# If server is not feed connection info will use default connection.
 if len(sys.argv) != 3:
     host = '127.0.0.1'
     port = 7274
@@ -48,6 +42,7 @@ WSock.bind((host, port))
 WSock.listen()
 print(f"Listening on {(host, port)}")
 
+# try statement that runs commands and closes if keyboardInterrupt is sent.
 try:
     while True:
         process_command()
