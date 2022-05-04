@@ -2,7 +2,7 @@
 IS-3033 Class Project Repository 
 
 ## Functionality
-Verion 1.0.1 
+Verion 1.0.2 
 
 Connection isolated to local machine
 
