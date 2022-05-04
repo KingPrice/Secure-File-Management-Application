@@ -4,7 +4,7 @@ IS-3033 Class Project Repository
 ## Functionality
 Verion 1.0.0 
 
-So far only uses local connection on machine. 
+Should only use local machine for connection 
 
 IP: 127.0.0.1
 
